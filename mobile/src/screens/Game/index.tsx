@@ -1,25 +1,37 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import logoImg from "../../assets/logo-nlw-esports.png";
-import { styles } from "./styles";
-import { Background } from "../../components/Background";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { GameParams } from "../../@types/navigation";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { THEME } from "../../theme";
-import { Heading } from "../../components/Heading";
-import { TeamCard, type TeamCardProps } from "../../components/TeamCard";
 import { useEffect, useState } from "react";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRoute, useNavigation } from "@react-navigation/native";
+import { Entypo } from "@expo/vector-icons";
+
+import logoImg from "../../assets/logo-nlw-esports.png";
+
+import { THEME } from "../../theme";
+import { styles } from "./styles";
+
+import { GameParams } from "../../@types/navigation";
+
+import { Heading } from "../../components/Heading";
+import { Background } from "../../components/Background";
+import { TeamCard, type TeamCardProps } from "../../components/TeamCard";
+import { TeamMatch } from "../../components/TeamMatch";
 
 export function Game() {
   const [teams, setTeams] = useState<TeamCardProps[]>([]);
+  const [discordTeamSelected, setDiscordTeamSelected] = useState("");
 
-  const route = useRoute();
-  const game = route.params as GameParams;
   const navigation = useNavigation();
+  const router = useRoute();
+  const game = router.params as GameParams;
 
   function handleGoBack() {
     navigation.goBack();
+  }
+
+  async function getDiscordUser(adsId: string) {
+    fetch(`http://192.168.1.6:3333/ads/${adsId}/discord`)
+      .then((response) => response.json())
+      .then((data) => setDiscordTeamSelected(data.discord));
   }
 
   useEffect(() => {
@@ -35,12 +47,13 @@ export function Game() {
           <TouchableOpacity onPress={handleGoBack}>
             <Entypo
               name="chevron-thin-left"
-              size={20}
               color={THEME.COLORS.CAPTION_300}
+              size={24}
             />
           </TouchableOpacity>
 
           <Image source={logoImg} style={styles.logo} />
+
           <View style={styles.right} />
         </View>
 
@@ -56,19 +69,25 @@ export function Game() {
           data={teams}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TeamCard data={item} onConnect={() => {}} />
+            <TeamCard data={item} onConnect={() => getDiscordUser(item.id)} />
           )}
           horizontal
+          style={styles.containerList}
           contentContainerStyle={[
             teams.length > 0 ? styles.contentList : styles.emptyListContent,
           ]}
-          showsHorizontalScrollIndicator={false}
-          style={styles.containerList}
-          ListEmptyComponent={() => (
+          showsHorizontalScrollIndicator
+          ListEmptyComponent={
             <Text style={styles.emptyListText}>
-              Nenhum anúncio de time encontrado
+              Não há anúncios publicados ainda.
             </Text>
-          )}
+          }
+        />
+
+        <TeamMatch
+          visible={discordTeamSelected.length > 0}
+          discord={discordTeamSelected}
+          onClose={() => setDiscordTeamSelected("")}
         />
       </SafeAreaView>
     </Background>

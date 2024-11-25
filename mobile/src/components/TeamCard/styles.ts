@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    width: "100%",
+    width: '100%',
     height: 36,
     borderRadius: 6,
     backgroundColor: THEME.COLORS.PRIMARY,
@@ -23,6 +23,6 @@ export const styles = StyleSheet.create({
     color: THEME.COLORS.TEXT,
     fontFamily: THEME.FONT_FAMILY.SEMI_BOLD,
     fontSize: THEME.FONT_SIZE.SM,
-    marginLeft: 8,
-  },
-});
+    marginLeft: 8
+  }
+})
