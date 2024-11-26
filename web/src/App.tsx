@@ -5,7 +5,7 @@ import { GameBanner } from "./components/GameBanner";
 
 import "./styles/main.css";
 
-import logoImg from "./assets/logo-nlw-esports.svg";
+import logoImg from "./assets/logo-nlw-esports.png";
 import { CreateAdModal } from "./components/CreateAdModal";
 import axios from "axios";
 
@@ -29,7 +29,7 @@ function App() {
 
   return (
     <div className="max-w-[1344px] mx-auto flex flex-col items-center my-20">
-      <img src={logoImg} alt="" />
+      <img src={logoImg} className="overflow-hidden h-32" alt="" />
 
       <h1 className="text-6xl text-white font-black mt-20">
         Seu{" "}
