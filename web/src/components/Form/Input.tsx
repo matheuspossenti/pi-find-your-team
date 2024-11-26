@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from "react";
+import { InputHTMLAttributes } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
